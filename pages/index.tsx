@@ -30,10 +30,12 @@ import axios from "axios";
 export default function Home() {
   const [text, setText] = useLocalStorage<string | null>("input", null);
   const [siteInfo,setSiteInfo] = useLocalStorage<JSON | null>("siteInfo", null);
+  const [isHoliday, setIsHoliday] = useLocalStorage<boolean>("isHoliday",false);
+  const [holidayData,setHolidayData] = useLocalStorage<JSON | null>("holidayData", null);
   // how to use it in other child components? const siteDate = JSON.parse(localStorage.getItem("siteInfo"));
   useEffect(() => {
     const fetchData = async () => {
-      const siteData = await axios.get("http://localhost:4400/api/sites/1")
+      const siteData = await axios.get("http://localhost:3300/sites/1")
         .then(function (response) {
           const data = response.data;
           console.log(data);
@@ -41,7 +43,24 @@ export default function Home() {
         })
         return setSiteInfo(siteData);
       }
+      const isHoliday = async () => {
+        const holidayData = await axios.get("http://localhost:3300/holidays/1/today")
+          .then(function (response) {
+            const data = response.data;
+            console.log('Got holiday data: ',data);
+            if(response.data.status === 404){
+              // save holidayData to local storage
+             console.log(data);
+              
+            }
+            setHolidayData(data);
+            setIsHoliday(true);
+            return data; 
+          });
+          return holidayData;
+      }
     fetchData();
+    isHoliday();
   }, []);
   
   return (
