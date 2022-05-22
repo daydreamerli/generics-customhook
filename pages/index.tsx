@@ -49,12 +49,11 @@ export default function Home() {
             const data = response.data;
             console.log('Got holiday data: ',data);
             if(response.data.status === 404){
-              // save holidayData to local storage
              console.log(data);
-              
+            return setIsHoliday(false);
             }
-            setHolidayData(data);
-            setIsHoliday(true);
+            setHolidayData(data);   // save holidayData to local storage
+            setIsHoliday(true); // set isHoliday to true 
             return data; 
           });
           return holidayData;
