@@ -30,7 +30,7 @@ import axios from "axios";
 export default function Home() {
   const [text, setText] = useLocalStorage<string | null>("input", null);
   const [siteInfo,setSiteInfo] = useLocalStorage<JSON | null>("siteInfo", null);
-
+  // how to use it in other child components? const siteDate = JSON.parse(localStorage.getItem("siteInfo"));
   useEffect(() => {
     const fetchData = async () => {
       const siteData = await axios.get("http://localhost:4400/api/sites/1")
