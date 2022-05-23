@@ -16,19 +16,19 @@ function Redirect({ to}: { to: string }) {
 }
 
 export default function Home() {
+  const router = useRouter();
+  const siteId = router.query.siteId;
+  console.log(siteId);
   const [text, setText] = useLocalStorage<string | null>("input", null);
   const [siteInfo,setSiteInfo] = useLocalStorage<JSON | null>("siteInfo", null);
   const [isHoliday, setIsHoliday] = useLocalStorage<boolean>("isHoliday",false);
   const [holidayData,setHolidayData] = useLocalStorage<JSON | null>("holidayData", null);
   // how to use it in other child components? const siteDate = JSON.parse(localStorage.getItem("siteInfo"));
-  const router = useRouter();
- 
-  if(isHoliday === true){
-    return <Redirect to ='/holiday' />;
-  }
+
   useEffect(() => {
+    if( typeof window !== 'undefined' && siteId !== undefined){
     const fetchData = async () => {
-      const siteData = await axios.get("http://localhost:3300/sites/1")
+      const siteData = await axios.get(`http://localhost:3300/sites/${siteId}`)
         .then(function (response) {
           const data = response.data;
           console.log(data);
@@ -37,7 +37,7 @@ export default function Home() {
         return setSiteInfo(siteData);
       }
       const isHoliday = async () => {
-        const holidayData = await axios.get("http://localhost:3300/holidays/1/today")
+        const holidayData = await axios.get(`http://localhost:3300/holidays/${siteId}/today`)
           .then(function (response) {
             const data = response.data;
             console.log('Got holiday data: ',data);
@@ -53,7 +53,12 @@ export default function Home() {
       }
     fetchData();
     isHoliday();
-  }, []);
+    }
+  }, [siteId]);
+
+  if(isHoliday === true){
+    return <Redirect to ='/holiday' />;
+  }
   
   return (
     <div className={styles.container}>
