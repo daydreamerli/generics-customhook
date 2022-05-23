@@ -19,7 +19,7 @@ export default function Home() {
   const router = useRouter();
   const siteId = router.query.siteId;
   console.log(siteId);
-  const [text, setText] = useLocalStorage<string | null>("input", null);
+  const [rego, setRego] = useLocalStorage<string | null>("rego", null);
   const [siteInfo,setSiteInfo] = useLocalStorage<JSON | null>("siteInfo", null);
   const [isHoliday, setIsHoliday] = useLocalStorage<boolean>("isHoliday",false);
   const [holidayData,setHolidayData] = useLocalStorage<JSON | null>("holidayData", null);
@@ -70,10 +70,12 @@ export default function Home() {
       <input
       className={styles.input}
       type="text"
-      value={text ?? ""}
-      onChange={(e: { target: { value: any; }; }) => setText(e.target.value)}
+      required
+      maxLength={6}
+      value={rego ?? ""}
+      onChange={(e: { target: { value: any; }; }) => setRego(e.target.value)}
       />
-      <div className={styles.title}>{text}</div>
+      <div className={styles.title}>{rego}</div>
     </div>
   );
 }
