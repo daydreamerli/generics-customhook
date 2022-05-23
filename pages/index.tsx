@@ -1,31 +1,19 @@
 import { useState, useEffect } from "react";
+import {useRouter } from "next/router";
+import Link from "next/link";
 import useLocalStorage from "../custom-hooks/local-storage";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
-// 1) Generics... type parameters
-// 2) "extends" to restrict
-// 3) Default generic types
-// 4) typeof to infer type from variable
 
-// function useLocalState<S>(key: string, initial: S) {
-//   const [value, setValue] = useState<S>(() => {
-//     if (typeof window !== "undefined" && window.localStorage) {
-//       const saved = window.localStorage.getItem(key);
-//       if (saved) {
-//         return JSON.parse(saved);
-//       }
-//     }
-//     return initial;
-//   });
+function Redirect({ to}: { to: string }) {
+  const router = useRouter();
 
-//   useEffect(() => {
-//     if (window.localStorage) {
-//       window.localStorage.setItem(key, JSON.stringify(value));
-//     }
-//   }, [value]);
+  useEffect( () =>{
+    router.push(to);
+  },[to])
 
-//   return [value, setValue] as [typeof value, typeof setValue];
-// }
+  return null;
+}
 
 export default function Home() {
   const [text, setText] = useLocalStorage<string | null>("input", null);
@@ -33,6 +21,11 @@ export default function Home() {
   const [isHoliday, setIsHoliday] = useLocalStorage<boolean>("isHoliday",false);
   const [holidayData,setHolidayData] = useLocalStorage<JSON | null>("holidayData", null);
   // how to use it in other child components? const siteDate = JSON.parse(localStorage.getItem("siteInfo"));
+  const router = useRouter();
+ 
+  if(isHoliday === true){
+    return <Redirect to ='/holiday' />;
+  }
   useEffect(() => {
     const fetchData = async () => {
       const siteData = await axios.get("http://localhost:3300/sites/1")
@@ -64,13 +57,18 @@ export default function Home() {
   
   return (
     <div className={styles.container}>
+       <div className={styles.title}>
+        <Link href={"/holiday"}>
+          <a>Holiday Page</a>
+        </Link>
+      </div>
     <input
       className={styles.input}
       type="text"
       value={text ?? ""}
       onChange={(e: { target: { value: any; }; }) => setText(e.target.value)}
     />
-    <div className={styles.output}>{text}</div>
+    <div className={styles.title}>{text}</div>
     </div>
   );
 }
