@@ -62,18 +62,18 @@ export default function Home() {
   
   return (
     <div className={styles.container}>
-       <div className={styles.title}>
-        <Link href={"/holiday"}>
-          <a>Holiday Page</a>
-        </Link>
-      </div>
-    <input
+    
+      <Link href={"/holiday"}>
+          <a className ={styles.link}>Holiday Page</a>
+      </Link>
+
+      <input
       className={styles.input}
       type="text"
       value={text ?? ""}
       onChange={(e: { target: { value: any; }; }) => setText(e.target.value)}
-    />
-    <div className={styles.title}>{text}</div>
+      />
+      <div className={styles.title}>{text}</div>
     </div>
   );
 }
