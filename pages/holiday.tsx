@@ -1,6 +1,6 @@
 import styles from "../styles/Home.module.css";
 
-export default function holidayPage(){
+export default function HolidayPage(){
 
     return(
         <div className={styles.container}>

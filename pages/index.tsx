@@ -5,16 +5,6 @@ import useLocalStorage from "../custom-hooks/local-storage";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
 
-function Redirect({ to}: { to: string }) {
-  const router = useRouter();
-
-  useEffect( () =>{
-    router.push(to);
-  },[to])
-
-  return null;
-}
-
 export default function Home() {
   const router = useRouter();
   const siteId = router.query.siteId;
@@ -42,12 +32,15 @@ export default function Home() {
             const data = response.data;
             console.log('Got holiday data: ',data);
             if(response.data.status === 404){
-             console.log(data);
+             console.log('404',data);
             return setIsHoliday(false);
             }
-            setHolidayData(data);   // save holidayData to local storage
-            setIsHoliday(true); // set isHoliday to true 
-            return data; 
+            else if(response.status === 200){
+              console.log('200',data);
+              setHolidayData(data);   // save holidayData to local storage
+              setIsHoliday(true); // set isHoliday to true 
+              return data;
+            }
           });
           return holidayData;
       }
@@ -55,18 +48,20 @@ export default function Home() {
     isHoliday();
     }
   }, [siteId]);
-
-  if(isHoliday === true){
-    return <Redirect to ='/holiday' />;
+  
+  if( typeof window !== 'undefined' ){
+    window.addEventListener("beforeunload", () => localStorage.clear());
   }
   
   return (
-    <div className={styles.container}>
-    
+    <div className={styles.container}>  
+      <h1>Home Page</h1>
       <Link href={"/holiday"}>
-          <a className ={styles.link}>Holiday Page</a>
+               <a className ={styles.link}>Holiday Page</a>
       </Link>
-
+      <Link href={"/parking"}>
+               <a className ={styles.link}>Parking Page</a>
+      </Link>
       <input
       className={styles.input}
       type="text"
