@@ -17,7 +17,8 @@
 }
 
 .box{
-  width: 100%;
+  width: 80%;
+  align-items: center;
   padding: 1rem;
   border-radius: 0.5rem;
   background-color: #fff;
