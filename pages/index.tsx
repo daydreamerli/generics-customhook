@@ -5,12 +5,12 @@ import useLocalStorage from "../custom-hooks/local-storage";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
 import SiteInfo from "../components/siteInfo";
+import Rego from "../components/rego";
 
 export default function Home() {
   const router = useRouter();
   const siteId = router.query.siteId as string;
   console.log(siteId);
-  const [rego, setRego] = useLocalStorage<string | null>("rego", null);
   const [isHoliday, setIsHoliday] = useLocalStorage<boolean>("isHoliday",false);
   const [holidayData,setHolidayData] = useLocalStorage<JSON  | null>("holidayData", null);
   const [redirectTo, setRedirectTo] = useState<string>('/parking');
@@ -59,15 +59,7 @@ export default function Home() {
       <Link href={`${redirectTo}`}>
                 <a className ={styles.linkTwo}>START PARKING</a>
       </Link>
-      <input
-      className={styles.input}
-      type="text"
-      required
-      maxLength={6}
-      value={rego ?? ""}
-      onChange={(e: { target: { value: string; }; }) => setRego(e.target.value.toUpperCase())}
-      />
-      <div className={styles.title}>{rego}</div>
+      <Rego />
       <SiteInfo  id = {siteId}/>
     </div>
   );
