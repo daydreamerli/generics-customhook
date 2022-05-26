@@ -31,7 +31,13 @@
   color: rgb(212, 61, 61);
   font-weight: 500;
   padding-bottom: 2rem;
-  border: 4px solid #
+}
+
+.linkTwo{
+  font-size: large;
+  color: rgb(12, 138, 75);
+  font-weight: 500;
+  padding-bottom: 2rem;
 }
 
 .footer {

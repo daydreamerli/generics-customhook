@@ -13,6 +13,7 @@ export default function Home() {
   const [siteInfo,setSiteInfo] = useLocalStorage<JSON | null>("siteInfo", null);
   const [isHoliday, setIsHoliday] = useLocalStorage<boolean>("isHoliday",false);
   const [holidayData,setHolidayData] = useLocalStorage<JSON | null>("holidayData", null);
+  const [redirectTo, setRedirectTo] = useState<string>('/parking');
   // how to use it in other child components? const siteDate = JSON.parse(localStorage.getItem("siteInfo"));
 
   useEffect(() => {
@@ -38,7 +39,8 @@ export default function Home() {
             else if(response.status === 200){
               console.log('200',data);
               setHolidayData(data);   // save holidayData to local storage
-              setIsHoliday(true); // set isHoliday to true 
+              setIsHoliday(true);
+              setRedirectTo('/holiday') // set isHoliday to true 
               return data;
             }
           });
@@ -61,6 +63,9 @@ export default function Home() {
       </Link>
       <Link href={"/parking"}>
                <a className ={styles.link}>Parking Page</a>
+      </Link>
+      <Link href={`${redirectTo}`}>
+                <a className ={styles.linkTwo}>START PARKING</a>
       </Link>
       <input
       className={styles.input}

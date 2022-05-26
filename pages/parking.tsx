@@ -30,6 +30,9 @@ function Redirect({ to}: { to: string }) {
     return(
         <div className={styles.container}>  
             <h1>Parking Page</h1>
+            <Link href={"/"}>
+               <a className ={styles.link}>Index Page</a>
+            </Link>
             <Link href={"/holiday"}>
                <a className ={styles.link}>Holiday Page</a>
             </Link>
