@@ -4,29 +4,22 @@ import Link from "next/link";
 import useLocalStorage from "../custom-hooks/local-storage";
 import styles from "../styles/Home.module.css";
 import axios from "axios";
+import SiteInfo from "../components/siteInfo";
 
 export default function Home() {
   const router = useRouter();
-  const siteId = router.query.siteId;
+  const siteId = router.query.siteId as string;
   console.log(siteId);
   const [rego, setRego] = useLocalStorage<string | null>("rego", null);
-  const [siteInfo,setSiteInfo] = useLocalStorage<JSON | null>("siteInfo", null);
   const [isHoliday, setIsHoliday] = useLocalStorage<boolean>("isHoliday",false);
-  const [holidayData,setHolidayData] = useLocalStorage<JSON | null>("holidayData", null);
+  const [holidayData,setHolidayData] = useLocalStorage<JSON  | null>("holidayData", null);
   const [redirectTo, setRedirectTo] = useState<string>('/parking');
+  
   // how to use it in other child components? const siteDate = JSON.parse(localStorage.getItem("siteInfo"));
 
   useEffect(() => {
     if( typeof window !== 'undefined' && siteId !== undefined){
-    const fetchData = async () => {
-      const siteData = await axios.get(`http://localhost:3300/sites/${siteId}`)
-        .then(function (response) {
-          const data = response.data;
-          console.log(data);
-          return data;
-        })
-        return setSiteInfo(siteData);
-      }
+ 
       const isHoliday = async () => {
         const holidayData = await axios.get(`http://localhost:3300/holidays/${siteId}/today`)
           .then(function (response) {
@@ -46,7 +39,6 @@ export default function Home() {
           });
           return holidayData;
       }
-    fetchData();
     isHoliday();
     }
   }, [siteId]);
@@ -73,9 +65,10 @@ export default function Home() {
       required
       maxLength={6}
       value={rego ?? ""}
-      onChange={(e: { target: { value: any; }; }) => setRego(e.target.value)}
+      onChange={(e: { target: { value: string; }; }) => setRego(e.target.value.toUpperCase())}
       />
       <div className={styles.title}>{rego}</div>
+      <SiteInfo  id = {siteId}/>
     </div>
   );
 }
