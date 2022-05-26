@@ -3,7 +3,7 @@ import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 import styles from "../styles/Home.module.css";
 
-function Redirect({ to}: { to: string }) {
+export function Redirect({ to}: { to: string }) {
     const router = useRouter();
   
     useEffect( () =>{
@@ -16,10 +16,12 @@ function Redirect({ to}: { to: string }) {
   export default function ParkingPage() {
     
     const [ isHoliday ,setIsHoliday ] = useState(false);
+    const [ siteData , setSiteDate ] = useState<JSON | null>(null);
     
     useEffect( () => {
       if( typeof window !== 'undefined' ){
         setIsHoliday(window.localStorage.getItem("isHoliday") === "true");
+        setSiteDate(JSON.parse(window.localStorage.getItem("siteInfo") as string));
       }
     })
    
@@ -36,6 +38,9 @@ function Redirect({ to}: { to: string }) {
             <Link href={"/holiday"}>
                <a className ={styles.link}>Holiday Page</a>
             </Link>
+            <p>
+                {JSON.stringify(siteData) || "No Site data"}
+            </p>
         </div>
     )
 }
